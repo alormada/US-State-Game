@@ -15,6 +15,10 @@ states = []
 for state in data.state:
     states.append(state)
 
+data_dict = {}
+guessed_states = []
+guessed_x = []
+guessed_y = []
 game_on = True
 while game_on:
     user_guess = screen.textinput(f"{score}/50 States Correct", "What's another state name?").title()
@@ -24,10 +28,18 @@ while game_on:
         y = int(current_state.y)
         correct_answer = State(user_guess, x, y)
         score += 1
-    del user_guess
+        guessed_states.append(user_guess)
+        guessed_x.append(x)
+        guessed_y.append(y)
+    elif user_guess == "Exit":
+        game_on = False
 
+for guess in guessed_states:
+    data_dict["state"] = guessed_states
+    data_dict["x"] = guessed_x
+    data_dict["y"] = guessed_y
 
-# states = data["state"]
-# print(states)
+df = pandas.DataFrame(data_dict)
+df.to_csv("current_progress.csv")
 
 screen.exitonclick()
